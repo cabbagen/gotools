@@ -12,7 +12,7 @@ func NewImageCompressor(imageType string) IImageCompressAble {
 		return JPGImage{}
 	}
 	if imageType == "png" {
-		return JPGImage{}
+		return PNGImage{}
 	}
 	return nil
 }
