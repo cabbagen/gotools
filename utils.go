@@ -1,7 +1,7 @@
 /**
  * 对于 golang Slice 结构的一些范型方法
  */
-package utils
+package gotools
 
 import "strings"
 
