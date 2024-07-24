@@ -6,29 +6,22 @@ import (
 	"image/png"
 
 	"github.com/joway/libimagequant-go/pngquant"
+	gosseract "github.com/otiai10/gosseract/v2"
 )
 
-// 可压缩
-type IImageCompressAble interface {
-	Compress(imgDatas []byte, quality int, speed int) ([]byte, error)
-}
-
-// 压缩文件
-func NewImageCompressor(imageType string) IImageCompressAble {
+// 图片压缩
+func ImageCompress(imageType string, imgDatas []byte, quality, speed int) ([]byte, error) {
 	if imageType == "jpg" {
-		return JPGImage{}
+		return imageCompressWithJPG(imgDatas, quality)
 	}
 	if imageType == "png" {
-		return PNGImage{}
+		return imageCompressWithPNG(imgDatas, quality, speed)
 	}
-	return nil
+	return []byte{}, nil
 }
 
-// jpg 图片
-type JPGImage struct {
-}
-
-func (jpgc JPGImage) Compress(imgThunk []byte, quality int, speed int) ([]byte, error) {
+// jpg 图片压缩
+func imageCompressWithJPG(imgThunk []byte, quality int) ([]byte, error) {
 	img, error := jpeg.Decode(bytes.NewReader(imgThunk))
 
 	if error != nil {
@@ -48,11 +41,8 @@ func (jpgc JPGImage) Compress(imgThunk []byte, quality int, speed int) ([]byte, 
 	return imgBuf.Bytes(), nil
 }
 
-// png 图片
-type PNGImage struct {
-}
-
-func (pngc PNGImage) Compress(imgThunk []byte, quality int, speed int) ([]byte, error) {
+// png 图片压缩
+func imageCompressWithPNG(imgThunk []byte, quality, speed int) ([]byte, error) {
 	img, error := png.Decode(bytes.NewReader(imgThunk))
 
 	if error != nil {
@@ -68,4 +58,23 @@ func (pngc PNGImage) Compress(imgThunk []byte, quality int, speed int) ([]byte, 
 	}
 
 	return imgBuf.Bytes(), nil
+}
+
+// 图片 OCR - 文件流
+// 英文：eng、简体中文：chi_sim、简体中文反向：chi_sim_vert、繁体中文：chi_tra、繁体中文反向：chi_tra_vert
+func ImageChunkOCRToText(imageChunk []byte, languages ...string) (string, error) {
+	client := gosseract.NewClient()
+
+	defer client.Close()
+
+	// 默认英文，
+	if len(languages) > 0 {
+		client.SetLanguage(languages...)
+	}
+
+	if error := client.SetImageFromBytes(imageChunk); error != nil {
+		return "", error
+	}
+
+	return client.Text()
 }

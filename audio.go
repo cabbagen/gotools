@@ -9,6 +9,13 @@ var DefaultTTSOptions []edge.Option = []edge.Option{
 	edge.WithVoice("zh-CN-XiaoyiNeural"), edge.WithRate("+0%"), edge.WithVolume("+0%"), edge.WithPitch("+0Hz"),
 }
 
+// 生成 tts 参数
+func CreateTTSOptions(voice, rate, volume, pitch string) []edge.Option {
+	return []edge.Option{
+		edge.WithVoice(voice), edge.WithRate(rate), edge.WithVolume(volume), edge.WithPitch(pitch),
+	}
+}
+
 // tts 服务
 func GenerateTTS(text, output string, options []edge.Option) (string, error) {
 	communicate, error := edge.NewCommunicate(text, options...)
@@ -30,11 +37,4 @@ func GenerateTTS(text, output string, options []edge.Option) (string, error) {
 	}
 
 	return speech.URL(speech.FileName)
-}
-
-// 生成 tts 参数
-func CreateTTSOptions(voice, rate, volume, pitch string) []edge.Option {
-	return []edge.Option{
-		edge.WithVoice(voice), edge.WithRate(rate), edge.WithVolume(volume), edge.WithPitch(pitch),
-	}
 }
