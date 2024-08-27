@@ -3,7 +3,10 @@
  */
 package gotools
 
-import "strings"
+import (
+	"encoding/json"
+	"strings"
+)
 
 // 字符串输出
 type Outputable interface {
@@ -103,4 +106,23 @@ func JoinBySlice[T Outputable](list []T, separator string) string {
 		return value.ToString()
 	})
 	return strings.Join(willJoinStrings, separator)
+}
+
+/**
+ * struct 转 map 结构
+ */
+func StructToMap(src interface{}) (map[string]interface{}, error) {
+	data, error := json.Marshal(src)
+
+	if error != nil {
+		return make(map[string]interface{}), error
+	}
+
+	result := make(map[string]interface{})
+
+	if error := json.Unmarshal(data, &result); error != nil {
+		return result, error
+	}
+
+	return result, nil
 }
