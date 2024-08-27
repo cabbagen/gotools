@@ -8,8 +8,8 @@ import (
 	"image/png"
 
 	"github.com/joway/libimagequant-go/pngquant"
-	webDecoder "github.com/kolesa-team/go-webp/decoder"
-	webEncoder "github.com/kolesa-team/go-webp/encoder"
+	"github.com/kolesa-team/go-webp/decoder"
+	"github.com/kolesa-team/go-webp/encoder"
 	"github.com/kolesa-team/go-webp/webp"
 	gosseract "github.com/otiai10/gosseract/v2"
 )
@@ -90,13 +90,13 @@ func imageCompressWithPNG(imgThunk []byte, quality, speed int) ([]byte, error) {
 // brew install webp
 // webp 图片压缩
 func imageCompressWithWebp(imgThunk []byte, quality int) ([]byte, error) {
-	img, error := webp.Decode(bytes.NewReader(imgThunk), &webDecoder.Options{})
+	img, error := webp.Decode(bytes.NewReader(imgThunk), &decoder.Options{})
 
 	if error != nil {
 		return nil, error
 	}
 
-	options, error := webEncoder.NewLossyEncoderOptions(webEncoder.PresetDefault, float32(quality))
+	options, error := encoder.NewLossyEncoderOptions(encoder.PresetDefault, float32(quality))
 
 	if error != nil {
 		return nil, error
@@ -138,7 +138,7 @@ func imageConvertJPGToWEBP(imgThunk []byte) ([]byte, error) {
 
 	imgBuf := bytes.Buffer{}
 
-	if error := webp.Encode(&imgBuf, img, &webEncoder.Option{}); error != nil {
+	if error := webp.Encode(&imgBuf, img, &encoder.Option{}); error != nil {
 		return nil, error
 	}
 
@@ -172,7 +172,7 @@ func imageConvertPNGToWEBP(imgThunk []byte) ([]byte, error) {
 
 	imgBuf := bytes.Buffer{}
 
-	if error := webp.Encode(&imgBuf, img, &webEncoder.Option{}); error != nil {
+	if error := webp.Encode(&imgBuf, img, &encoder.Option{}); error != nil {
 		return nil, error
 	}
 
@@ -181,7 +181,7 @@ func imageConvertPNGToWEBP(imgThunk []byte) ([]byte, error) {
 
 // 图片格式转换: webp => jpg
 func imageConvertWEBPToJPG(imgThunk []byte) ([]byte, error) {
-	img, error := webp.Decode(bytes.NewReader(imgThunk), &webDecoder.Options{})
+	img, error := webp.Decode(bytes.NewReader(imgThunk), &decoder.Options{})
 
 	if error != nil {
 		return nil, error
@@ -198,7 +198,7 @@ func imageConvertWEBPToJPG(imgThunk []byte) ([]byte, error) {
 
 // 图片格式转换: webp => png
 func imageConvertWEBPToPNG(imgThunk []byte) ([]byte, error) {
-	img, error := webp.Decode(bytes.NewReader(imgThunk), &webDecoder.Options{})
+	img, error := webp.Decode(bytes.NewReader(imgThunk), &decoder.Options{})
 
 	if error != nil {
 		return nil, error
