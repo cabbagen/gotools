@@ -138,7 +138,7 @@ func imageConvertJPGToWEBP(imgThunk []byte) ([]byte, error) {
 
 	imgBuf := bytes.Buffer{}
 
-	if error := webp.Encode(&imgBuf, img, &encoder.Option{}); error != nil {
+	if error := webp.Encode(&imgBuf, img, &encoder.Options{}); error != nil {
 		return nil, error
 	}
 
@@ -172,7 +172,7 @@ func imageConvertPNGToWEBP(imgThunk []byte) ([]byte, error) {
 
 	imgBuf := bytes.Buffer{}
 
-	if error := webp.Encode(&imgBuf, img, &encoder.Option{}); error != nil {
+	if error := webp.Encode(&imgBuf, img, &encoder.Options{}); error != nil {
 		return nil, error
 	}
 
