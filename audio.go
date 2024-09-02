@@ -1,7 +1,8 @@
 package gotools
 
 import (
-	edge_tts_go "github.com/pp-group/edge-tts-go"
+	"github.com/cabbagen/gotools/vosk"
+	"github.com/pp-group/edge-tts-go"
 	"github.com/pp-group/edge-tts-go/biz/service/tts/edge"
 )
 
@@ -37,4 +38,9 @@ func GenerateTTS(text, output string, options []edge.Option) (string, error) {
 	}
 
 	return speech.URL(speech.FileName)
+}
+
+// stt 服务
+func GenerateSTT() {
+	fmt.Println("hello world")
 }

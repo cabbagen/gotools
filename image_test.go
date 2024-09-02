@@ -7,7 +7,7 @@ import (
 )
 
 func TestImageCompress(t *testing.T) {
-	file, error := os.ReadFile("./images/JnD5BF9Uq-1200x800.webp")
+	file, error := os.ReadFile("./resource/images/simple.jpg")
 
 	if error != nil {
 		t.Logf("读取文件错误: %s\n", error.Error())
