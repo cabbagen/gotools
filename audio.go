@@ -1,8 +1,11 @@
 package gotools
 
 import (
-	"github.com/cabbagen/gotools/vosk"
-	"github.com/pp-group/edge-tts-go"
+	"fmt"
+	"os"
+	"os/exec"
+
+	edge_tts_go "github.com/pp-group/edge-tts-go"
 	"github.com/pp-group/edge-tts-go/biz/service/tts/edge"
 )
 
@@ -43,4 +46,15 @@ func GenerateTTS(text, output string, options []edge.Option) (string, error) {
 // stt 服务
 func GenerateSTT() {
 	fmt.Println("hello world")
+
+	command := exec.Command("ls")
+
+	command.Stdout = os.Stdout
+	command.Stderr = os.Stderr
+
+	err := command.Run()
+
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 }
