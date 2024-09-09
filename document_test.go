@@ -20,3 +20,14 @@ func TestPDFCreateFile(t *testing.T) {
 	}
 	log.Printf("create success")
 }
+
+func TestPDFImportImages(t *testing.T) {
+	images := []string{
+		"./resources/images/ducati.png", "./resources/images/pexels.jpg", "./resources/images/simple.jpg",
+	}
+	if error := PDFImportImages(images, "./resources/pdfs/images.pdf", "pos:c, scale:0.9 rel"); error != nil {
+		log.Fatalf("create images pdf file error: %s\n", error.Error())
+		return
+	}
+	log.Printf("create success")
+}
