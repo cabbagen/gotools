@@ -31,3 +31,19 @@ func TestPDFImportImages(t *testing.T) {
 	}
 	log.Printf("create success")
 }
+
+func TestPDFExtractImages(t *testing.T) {
+	if error := PDFExtractImages("./resources/pdfs/images.pdf", "./resources/images/", []string{"1-2"}); error != nil {
+		log.Fatalf("extract images error: %s\n", error.Error())
+		return
+	}
+	log.Printf("extract success")
+}
+
+func TestPDFExportImages(t *testing.T) {
+	if error := PDFExportImages("./resources/pdfs/example.pdf", "./resources/images/", []string{}); error != nil {
+		log.Fatalf("export images error: %s\n", error.Error())
+		return
+	}
+	log.Printf("export success")
+}

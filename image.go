@@ -138,7 +138,13 @@ func imageConvertJPGToWEBP(imgThunk []byte) ([]byte, error) {
 
 	imgBuf := bytes.Buffer{}
 
-	if error := webp.Encode(&imgBuf, img, &encoder.Options{}); error != nil {
+	options, error := encoder.NewLossyEncoderOptions(encoder.PresetDefault, 75)
+
+	if error != nil {
+		return nil, error
+	}
+
+	if error := webp.Encode(&imgBuf, img, options); error != nil {
 		return nil, error
 	}
 
@@ -172,7 +178,13 @@ func imageConvertPNGToWEBP(imgThunk []byte) ([]byte, error) {
 
 	imgBuf := bytes.Buffer{}
 
-	if error := webp.Encode(&imgBuf, img, &encoder.Options{}); error != nil {
+	options, error := encoder.NewLossyEncoderOptions(encoder.PresetDefault, 75)
+
+	if error != nil {
+		return nil, error
+	}
+
+	if error := webp.Encode(&imgBuf, img, options); error != nil {
 		return nil, error
 	}
 

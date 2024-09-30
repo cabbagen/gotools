@@ -7,7 +7,7 @@ import (
 )
 
 func TestImageCompress(t *testing.T) {
-	file, error := os.ReadFile("./resource/images/simple.jpg")
+	file, error := os.ReadFile("./resources/images/simple.jpg")
 
 	if error != nil {
 		t.Logf("读取文件错误: %s\n", error.Error())
@@ -22,4 +22,22 @@ func TestImageCompress(t *testing.T) {
 	}
 
 	t.Logf("图片压缩成功\ndata:image/webp;base64,%s", base64.RawStdEncoding.EncodeToString(image))
+}
+
+func TestImageConvert(t *testing.T) {
+	file, error := os.ReadFile("./resources/images/ex.webp")
+
+	if error != nil {
+		t.Logf("读取文件错误: %s\n", error.Error())
+		return
+	}
+
+	image, error := ImageConvert("webp", "png", file)
+
+	if error != nil {
+		t.Logf("文件转换错误: %s\n", error.Error())
+		return
+	}
+
+	t.Logf("图片转换成功\ndata:image/png;base64,%s", base64.RawStdEncoding.EncodeToString(image))
 }
