@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"image"
 	"image/jpeg"
 	"image/png"
 
@@ -11,6 +12,7 @@ import (
 	"github.com/kolesa-team/go-webp/decoder"
 	"github.com/kolesa-team/go-webp/encoder"
 	"github.com/kolesa-team/go-webp/webp"
+	"github.com/nfnt/resize"
 	gosseract "github.com/otiai10/gosseract/v2"
 )
 
@@ -244,4 +246,14 @@ func ImageChunkOCRToText(imageChunk []byte, languages ...string) (string, error)
 	}
 
 	return client.Text()
+}
+
+// 转换图片大小
+func ImageResize(width, height uint, imgDatas []byte) (image.Image, error) {
+	img, _, error := image.Decode(bytes.NewBuffer(imgDatas))
+
+	if error != nil {
+		return nil, error
+	}
+	return resize.Resize(width, height, img, resize.Lanczos3), nil
 }

@@ -1,7 +1,9 @@
 package gotools
 
 import (
+	"bytes"
 	"encoding/base64"
+	"image/jpeg"
 	"os"
 	"testing"
 )
@@ -40,4 +42,29 @@ func TestImageConvert(t *testing.T) {
 	}
 
 	t.Logf("图片转换成功\ndata:image/png;base64,%s", base64.RawStdEncoding.EncodeToString(image))
+}
+
+func TestImageResize(t *testing.T) {
+	file, error := os.ReadFile("./resources/images/pexels.jpg")
+
+	if error != nil {
+		t.Logf("读取文件错误: %s\n", error.Error())
+		return
+	}
+
+	image, error := ImageResize(200, 200, file)
+
+	if error != nil {
+		t.Logf("转换文件错误: %s\n", error.Error())
+		return
+	}
+
+	imgBuf := bytes.Buffer{}
+
+	if error := jpeg.Encode(&imgBuf, image, &jpeg.Options{Quality: 70}); error != nil {
+		t.Logf("写入文件错误: %s\n", error.Error())
+		return
+	}
+
+	t.Logf("图片转换成功\ndata:image/jpeg;base64,%s", base64.RawStdEncoding.EncodeToString(imgBuf.Bytes()))
 }
