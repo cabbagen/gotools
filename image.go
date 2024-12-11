@@ -1,3 +1,10 @@
+/**
+ * 部分 golang 依赖 C++ 库，需要提前配置环境
+ * macOS：
+ * brew install webp tesseract tesseract-lang // 英文：eng、简体中文：chi_sim、简体中文反向：chi_sim_vert、繁体中文：chi_tra、繁体中文反向：chi_tra_vert => 默认英文
+ *
+ * for libraries：github.com/kolesa-team/go-webp github.com/otiai10/gosseract/v2
+ */
 package gotools
 
 import (
@@ -28,25 +35,6 @@ func ImageCompress(imageType string, imgDatas []byte, quality, speed int) ([]byt
 		return imageCompressWithWebp(imgDatas, quality)
 	}
 	return []byte{}, nil
-}
-
-// 图片转换
-func ImageConvert(sourceType, targetType string, imgDatas []byte) ([]byte, error) {
-	typeKey := fmt.Sprintf("%s-%s", sourceType, targetType)
-
-	typeFuncMap := map[string]func(imageThunk []byte) ([]byte, error){
-		"jpg-png":  imageConvertJPGToPNG,
-		"jpg-webp": imageConvertJPGToWEBP,
-		"png-jpg":  imageConvertPNGToJPG,
-		"png-webp": imageConvertPNGToWEBP,
-		"webp-jpg": imageConvertWEBPToJPG,
-		"webp-png": imageConvertWEBPToPNG,
-	}
-
-	if imageConvertFunc, ok := typeFuncMap[typeKey]; ok {
-		return imageConvertFunc(imgDatas)
-	}
-	return []byte{}, errors.New("sourceType, targetType 传参错误")
 }
 
 // jpg 图片压缩
@@ -111,6 +99,25 @@ func imageCompressWithWebp(imgThunk []byte, quality int) ([]byte, error) {
 	}
 
 	return imgBuf.Bytes(), nil
+}
+
+// 图片转换
+func ImageConvert(sourceType, targetType string, imgDatas []byte) ([]byte, error) {
+	typeKey := fmt.Sprintf("%s-%s", sourceType, targetType)
+
+	typeFuncMap := map[string]func(imageThunk []byte) ([]byte, error){
+		"jpg-png":  imageConvertJPGToPNG,
+		"jpg-webp": imageConvertJPGToWEBP,
+		"png-jpg":  imageConvertPNGToJPG,
+		"png-webp": imageConvertPNGToWEBP,
+		"webp-jpg": imageConvertWEBPToJPG,
+		"webp-png": imageConvertWEBPToPNG,
+	}
+
+	if imageConvertFunc, ok := typeFuncMap[typeKey]; ok {
+		return imageConvertFunc(imgDatas)
+	}
+	return []byte{}, errors.New("sourceType, targetType 传参错误")
 }
 
 // 图片格式转换: jpg => png
@@ -227,10 +234,17 @@ func imageConvertWEBPToPNG(imgThunk []byte) ([]byte, error) {
 	return imgBuf.Bytes(), nil
 }
 
-// brew install tesseract
-// brew install tesseract-lang
-// 图片 OCR - 文件流
-// 英文：eng、简体中文：chi_sim、简体中文反向：chi_sim_vert、繁体中文：chi_tra、繁体中文反向：chi_tra_vert => 默认英文
+// 转换图片大小
+func ImageResize(width, height uint, imgDatas []byte) (image.Image, error) {
+	img, _, error := image.Decode(bytes.NewBuffer(imgDatas))
+
+	if error != nil {
+		return nil, error
+	}
+	return resize.Resize(width, height, img, resize.Lanczos3), nil
+}
+
+// 图片 OCR 识别
 func ImageChunkOCRToText(imageChunk []byte, languages ...string) (string, error) {
 	client := gosseract.NewClient()
 
@@ -246,14 +260,4 @@ func ImageChunkOCRToText(imageChunk []byte, languages ...string) (string, error)
 	}
 
 	return client.Text()
-}
-
-// 转换图片大小
-func ImageResize(width, height uint, imgDatas []byte) (image.Image, error) {
-	img, _, error := image.Decode(bytes.NewBuffer(imgDatas))
-
-	if error != nil {
-		return nil, error
-	}
-	return resize.Resize(width, height, img, resize.Lanczos3), nil
 }
