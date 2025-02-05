@@ -8,7 +8,7 @@ import (
 )
 
 func TestGenerateTTS(t *testing.T) {
-	thunk, error := GenerateTTS(edgettstool.DEFAULT_LANG, edgettstool.DEFAULT_VOICE, edgettstool.DEFAULT_VOLUME, "你好啊")
+	thunk, error := GenerateTTS(TTS_DEFAULT_LANG, TTS_DEFAULT_VOICE, TTS_DEFAULT_VOLUME, "你好啊")
 
 	if error != nil {
 		t.Errorf("转换: %s\n", error.Error())
@@ -23,7 +23,7 @@ func TestGenerateTTS(t *testing.T) {
 }
 
 func TestGenerateTTSFile(t *testing.T) {
-	if error := GenerateTTSFile(edgettstool.DEFAULT_LANG, edgettstool.DEFAULT_VOICE, edgettstool.DEFAULT_VOLUME, "你好啊", "./example-2.mp3", 0777); error != nil {
+	if error := GenerateTTSFile(TTS_DEFAULT_LANG, TTS_DEFAULT_VOICE, TTS_DEFAULT_VOLUME, "你好啊", "./example-2.mp3", 0777); error != nil {
 		t.Errorf("写入失败: %s\n", error.Error())
 		return
 	}
